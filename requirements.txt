@@ -1,0 +1,8 @@
+fastapi
+uvicorn
+numpy
+pandas
+dill
+scikit-learn==1.3.2
+xgboost
+catboost
