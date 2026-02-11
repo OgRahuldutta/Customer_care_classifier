@@ -1,0 +1,19 @@
+2026-02-11 22:52:01,081 - INFO - Initiating data ingestion
+2026-02-11 22:52:01,094 - INFO - Read the dataset as dataframe
+2026-02-11 22:52:01,133 - INFO - Train Test split initiated
+2026-02-11 22:52:01,172 - INFO - Ingestion of the data is completed.
+2026-02-11 22:52:01,212 - INFO - Read train and test data completed
+2026-02-11 22:52:01,255 - INFO - Preprocessing and label encoding completed
+2026-02-11 22:52:01,255 - INFO - Splitting training and testing data
+2026-02-11 22:52:21,803 - INFO - Best model: Logistic Regression | Score: 0.792754135466097
+2026-02-11 22:52:21,807 - INFO - Final Test AUC Score: 0.7017053614411528
+2026-02-11 22:52:21,815 - INFO - 
+              precision    recall  f1-score   support
+
+         0.0       0.71      0.60      0.65      1788
+         1.0       0.71      0.80      0.75      2212
+
+    accuracy                           0.71      4000
+   macro avg       0.71      0.70      0.70      4000
+weighted avg       0.71      0.71      0.71      4000
+
