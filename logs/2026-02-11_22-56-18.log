@@ -1,7 +1,0 @@
-2026-02-11 22:56:20,509 - INFO - Initiating data ingestion
-2026-02-11 22:56:20,526 - INFO - Read the dataset as dataframe
-2026-02-11 22:56:20,562 - INFO - Train Test split initiated
-2026-02-11 22:56:20,599 - INFO - Ingestion of the data is completed.
-2026-02-11 22:56:20,637 - INFO - Read train and test data completed
-2026-02-11 22:56:20,678 - INFO - Preprocessing and label encoding completed
-2026-02-11 22:56:20,678 - INFO - Splitting training and testing input data
