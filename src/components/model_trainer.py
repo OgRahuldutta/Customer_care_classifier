@@ -17,8 +17,8 @@ from src.utils import save_object, evaluate_models
 
 @dataclass
 class ModelTrainerConfig:
-    trained_model_file_path: str = os.path.join('deployment','artifacts', 'model.pkl')
-    label_encoder_file_path: str = os.path.join('deployment','artifacts', 'label_encoder.pkl')
+    trained_model_file_path: str = os.path.join('artifacts', 'model.pkl')
+    label_encoder_file_path: str = os.path.join('artifacts', 'label_encoder.pkl')
 
 
 class ModelTrainer:

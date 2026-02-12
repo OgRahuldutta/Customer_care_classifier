@@ -16,8 +16,8 @@ from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path: str = os.path.join("deployment","artifacts", "preprocessor.pkl")
-    label_encoder_file_path: str = os.path.join("deployment","artifacts", "label_encoder.pkl")
+    preprocessor_obj_file_path: str = os.path.join("artifacts", "preprocessor.pkl")
+    label_encoder_file_path: str = os.path.join("artifacts", "label_encoder.pkl")
 
 
 class DataTransformation:
