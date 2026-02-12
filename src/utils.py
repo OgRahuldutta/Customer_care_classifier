@@ -24,9 +24,15 @@ def load_object(file_path):
 
 def evaluate_models(X_train, y_train, X_test, y_test, models, params):
     try:
+        from sklearn.model_selection import StratifiedKFold
+        import numpy as np
+
         report = {}
         best_model = None
         best_score = 0
+
+        # 🔥 Use StratifiedKFold for better ROC stability
+        cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
         for model_name, model in models.items():
 
@@ -36,7 +42,7 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, params):
                 gs = GridSearchCV(
                     estimator=model,
                     param_grid=param_grid,
-                    cv=3,
+                    cv=cv,
                     scoring="roc_auc",
                     n_jobs=-1
                 )
@@ -45,11 +51,13 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, params):
             else:
                 model.fit(X_train, y_train)
 
-            # 🔥 Correct ROC-AUC calculation
+            # 🔥 Always use probability if available
             if hasattr(model, "predict_proba"):
                 y_proba = model.predict_proba(X_test)[:, 1]
-            else:
+            elif hasattr(model, "decision_function"):
                 y_proba = model.decision_function(X_test)
+            else:
+                y_proba = model.predict(X_test)
 
             score = roc_auc_score(y_test, y_proba)
 

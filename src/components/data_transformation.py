@@ -16,8 +16,8 @@ from src.utils import save_object
 
 @dataclass
 class DataTransformationConfig:
-    preprocessor_obj_file_path: str = os.path.join("artifacts", "preprocessor.pkl")
-    label_encoder_file_path: str = os.path.join("artifacts", "label_encoder.pkl")
+    preprocessor_obj_file_path: str = os.path.join("deployment","artifacts", "preprocessor.pkl")
+    label_encoder_file_path: str = os.path.join("deployment","artifacts", "label_encoder.pkl")
 
 
 class DataTransformation:
@@ -26,20 +26,42 @@ class DataTransformation:
 
     def get_data_transformation_object(self):
         try:
-            num_features = ['Age', 'Tenure_Months', 'Monthly_Charges']
-            cat_features = ['Internet_Service', 'Contract_Type',
-                            'Payment_Method', 'Gender', 'Tech_Support']
+            num_features = [
+                "Age",
+                "Tenure_Months",
+                "Monthly_Charges"
+            ]
 
+            cat_features = [
+                "Internet_Service",
+                "Contract_Type",
+                "Payment_Method",
+                "Gender",
+                "Tech_Support"
+            ]
+
+            # =========================
+            # Numeric Pipeline
+            # =========================
             num_pipeline = Pipeline([
                 ("imputer", SimpleImputer(strategy="median")),
                 ("scaler", StandardScaler())
             ])
 
+            # =========================
+            # Categorical Pipeline
+            # =========================
             cat_pipeline = Pipeline([
                 ("imputer", SimpleImputer(strategy="most_frequent")),
-                ("onehot", OneHotEncoder(handle_unknown="ignore"))
+                ("onehot", OneHotEncoder(
+                    handle_unknown="ignore",
+                    sparse=False  # Important for XGBoost
+                ))
             ])
 
+            # =========================
+            # Column Transformer
+            # =========================
             preprocessor = ColumnTransformer([
                 ("num", num_pipeline, num_features),
                 ("cat", cat_pipeline, cat_features)
@@ -65,20 +87,35 @@ class DataTransformation:
             X_test = test_df.drop(columns=[target_column])
             y_test = test_df[target_column]
 
+            # =========================
+            # Preprocessing
+            # =========================
             preprocessor = self.get_data_transformation_object()
 
             X_train_processed = preprocessor.fit_transform(X_train)
             X_test_processed = preprocessor.transform(X_test)
 
-            # Encode target
+            # Convert to numpy explicitly
+            X_train_processed = np.array(X_train_processed)
+            X_test_processed = np.array(X_test_processed)
+
+            # =========================
+            # Encode Target (ONLY HERE)
+            # =========================
             label_encoder = LabelEncoder()
+
             y_train_encoded = label_encoder.fit_transform(y_train)
             y_test_encoded = label_encoder.transform(y_test)
 
+            # =========================
+            # Merge Features + Target
+            # =========================
             train_arr = np.c_[X_train_processed, y_train_encoded]
             test_arr = np.c_[X_test_processed, y_test_encoded]
 
-            # Save objects
+            # =========================
+            # Save Artifacts
+            # =========================
             save_object(self.config.preprocessor_obj_file_path, preprocessor)
             save_object(self.config.label_encoder_file_path, label_encoder)
 
